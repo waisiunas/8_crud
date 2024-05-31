@@ -10,9 +10,11 @@ require_once "./partials/connection.php";
 $sql = "SELECT * FROM `countries`;";
 $result = $conn->query($sql);
 
-echo "<pre>";
-print_r($result);
-echo "</pre>";
+$countries = $result->fetch_all(MYSQLI_ASSOC);
+
+// echo "<pre>";
+// print_r($result->fetch_all(MYSQLI_ASSOC));
+// echo "</pre>";
 ?>
 <!doctype html>
 <html lang="en">
@@ -40,32 +42,65 @@ echo "</pre>";
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered m-0">
-                            <thead>
-                                <tr>
-                                    <th>Sr. No.</th>
-                                    <th>Name</th>
-                                    <th>Capital</th>
-                                    <th>Currency</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
+                        <?php
+                        if ($result->num_rows !== 0) { ?>
+                            <table class="table table-bordered m-0">
+                                <thead>
+                                    <tr>
+                                        <th>Sr. No.</th>
+                                        <th>Name</th>
+                                        <th>Capital</th>
+                                        <th>Currency</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
 
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Pakistan</td>
-                                    <td>Islamabad</td>
-                                    <td>PKR</td>
-                                    <td>
-                                        <a href="" class="btn btn-primary">Edit</a>
-                                        <a href="" class="btn btn-danger">Delete</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                <tbody>
+                                    <?php
+                                    // $sr = 1;
+                                    // while($row = $result->fetch_assoc()) { 
+                                    ?>
+                                    <!-- <tr>
+                                        <td><?php echo $sr++ ?></td>
+                                        <td><?php echo $row['name'] ?></td>
+                                        <td><?php echo $row['capital'] ?></td>
+                                        <td><?php echo $row['currency'] ?></td>
+                                        <td>
+                                            <a href="" class="btn btn-primary">Edit</a>
+                                            <a href="" class="btn btn-danger">Delete</a>
+                                        </td>
+                                    </tr> -->
+                                    <?php
+                                    // }
+                                    ?>
 
-                        <div class="alert alert-info m-0">No record found!</div>
+                                    <?php
+                                    $sr = 1;
+                                    foreach ($countries as $country) { ?>
+                                        <tr>
+                                            <td><?php echo $sr++ ?></td>
+                                            <td><?php echo $country['name'] ?></td>
+                                            <td><?php echo $country['capital'] ?></td>
+                                            <td><?php echo $country['currency'] ?></td>
+                                            <td>
+                                                <a href="./edit-country.php?id=<?php echo $country['id'] ?>" class="btn btn-primary">Edit</a>
+                                                <a href="./delete-country.php?id=<?php echo $country['id'] ?>" class="btn btn-danger">Delete</a>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        <?php
+                        } else { ?>
+                            <div class="alert alert-info m-0">No record found!</div>
+                        <?php
+                        }
+                        ?>
+
+
+
                     </div>
                 </div>
             </div>
