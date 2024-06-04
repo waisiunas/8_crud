@@ -1,6 +1,10 @@
 <?php
 require_once "./partials/connection.php";
 
+if (empty($_GET['id']) || !isset($_GET['id'])) {
+    header('location: ./');
+}
+
 $id = htmlspecialchars($_GET['id']);
 
 $sql = "SELECT * FROM `countries` WHERE `id` = $id LIMIT 1";
